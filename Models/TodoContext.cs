@@ -4,12 +4,16 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
+
 namespace ToDoList.Models
 {
-    public class TodoContext: DbContext
+    // Клас, що представляє контекст бази даних
+    public class TodoContext : DbContext
     {
-        public TodoContext(): base("TodoConnection") { }
+        // Назва з'єднання з Web.config
+        public TodoContext() : base("TodoConnection") { }
 
+        // Таблиця задач
         public DbSet<TodoItem> TodoItems { get; set; }
     }
 }

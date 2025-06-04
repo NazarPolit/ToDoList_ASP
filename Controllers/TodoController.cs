@@ -8,49 +8,49 @@ namespace TodoListMvcApp.Controllers
     public class TodoController : Controller
     {
         private readonly TodoContext db = new TodoContext();
+
+        // Показ усіх задач
         public ActionResult Index()
         {
-            var items = db.TodoItems.OrderBy(x => x.Id).ToList(); // Отримати всі задачі
-            return View(items); // Передати список у View
+            var items = db.TodoItems.OrderBy(i => i.Id).ToList();
+            return View(items);
         }
 
-        // Метод для додавання нової задачі (через POST)
+        // Додавання нової задачі
         [HttpPost]
         public ActionResult Add(string title)
         {
-            if (!string.IsNullOrWhiteSpace(title)) // Перевірка, що введено щось
+            if (!string.IsNullOrWhiteSpace(title))
             {
                 db.TodoItems.Add(new TodoItem { Title = title, IsDone = false });
                 db.SaveChanges();
             }
-
-            return RedirectToAction("Index"); // Повернутись на головну сторінку
+            return RedirectToAction("Index");
         }
 
-        // Метод для видалення задачі
-        public ActionResult Delete(int id)
-        {
-            var item = db.TodoItems.Find(id);
-            
-            if(item != null)
-            {
-                db.TodoItems.Remove(item);
-                db.SaveChanges();
-            }
-            return RedirectToAction("Index"); // Повернутись
-        }
-
-        // Метод для перемикання виконання задачі (виконано ↔ не виконано)
+        // Перемикання виконаного стану
+        [HttpPost]
         public ActionResult Toggle(int id)
         {
             var item = db.TodoItems.Find(id);
-
             if (item != null)
             {
                 item.IsDone = !item.IsDone;
                 db.SaveChanges();
-            } // Змінити статус
-            return RedirectToAction("Index"); // Повернутись
+            }
+            return RedirectToAction("Index");
+        }
+
+        // Видалення задачі
+        public ActionResult Delete(int id)
+        {
+            var item = db.TodoItems.Find(id);
+            if (item != null)
+            {
+                db.TodoItems.Remove(item);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
     }
 }
