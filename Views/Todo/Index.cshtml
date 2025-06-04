@@ -1,0 +1,32 @@
+﻿@model List<ToDoList.Models.TodoItem>
+
+<div class="todo-page">
+    <div class="todo-box">
+        <h2 class="todo-box__title">📝 My ToDo List</h2>
+
+        <form method="post" action="/Todo/Add" class="todo-form">
+            <div class="todo-form__group">
+                <input type="text" name="title" class="todo-form__input" placeholder="Enter a new task..." required />
+                <button type="submit" class="todo-form__button">Add</button>
+            </div>
+        </form>
+
+        <ul class="todo-list">
+            @foreach (var item in Model)
+            {
+                var itemClass = item.IsDone ? "todo-item todo-item--done fade-in" : "todo-item fade-in";
+                <li class="@itemClass">
+                    <div class="todo-item__content">
+                        <form method="post" action="/Todo/Toggle/@item.Id" class="todo-item__toggle-form">
+                            <button type="submit" class="todo-item__toggle-button">
+                                @(item.IsDone ? "✅" : "⬜")
+                            </button>
+                        </form>
+                        <span class="todo-item__text">@item.Title</span>
+                    </div>
+                    <a href="/Todo/Delete/@item.Id" class="todo-item__delete-button">✖</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
